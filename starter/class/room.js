@@ -52,16 +52,23 @@ class Room {
   }
 
   getItemByName(name) {
-
-    // Fill this in
-
+    let idx;
+    for (const item of this.items) {
+        if (item.name === name) {
+            idx = this.items.indexOf(item);
+            break;
+        }
+    }
+    let gotItem = this.items.splice(idx, 1);
+    return gotItem[0];
   }
 
   getEnemyByName(name) {
 
     // Fill this in
-
+  }
 }
+
 
 module.exports = {
   Room,

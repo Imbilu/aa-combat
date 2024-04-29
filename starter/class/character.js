@@ -1,16 +1,37 @@
 class Character {
 
   constructor(name, description, currentRoom) {
-    // Fill this in
-
+    this.name = name;
+    this.description = description;
+    this.currentRoom = currentRoom;
+    this.health = 100;
+    this.strength = 10;
+    this.items = [];
   }
 
   applyDamage(amount) {
-    // Fill this in
+    this.health -= amount;
+    if (this.health === 0) {
+      this.die();
+    }
+  }
+
+  dropItem(itemName) {
+    let idx;
+    for (const item of this.items) {
+        if (item.name === itemName) {
+            idx = this.items.indexOf(item);
+        }
+    }
+    let droppedItem = this.items.splice(idx, 1);
+    this.currentRoom.items.push(droppedItem[0]);
   }
 
   die() {
-    // Fill this in
+    for (const item of this.items) {
+      this.dropItem(item);
+    }
+    this.currentRoom = null;
   }
 
 }

@@ -3,7 +3,8 @@ const {Character} = require('./character');
 
 class Enemy extends Character {
   constructor(name, description, currentRoom) {
-    // Fill this in
+    super(name, description, currentRoom);
+    this.cooldown = 3000;
   }
 
   setPlayer(player) {
@@ -12,11 +13,19 @@ class Enemy extends Character {
 
 
   randomMove() {
-    // Fill this in
+    setTimeout(function () {
+      const availableExits = this.currentRoom.getExits();
+      if (availableExits.length > 0) {
+        const randomIndex = Math.floor(Math.random() * availableExits.length);
+        const newRoom = this.currentRoom.getRoomInDirection(availableExits[randomIndex]);
+        this.currentRoom = newRoom;
+      }
+    }, this.cooldown);
+
   }
 
   takeSandwich() {
-    // Fill this in
+
   }
 
   // Print the alert only if player is standing in the same room
@@ -29,18 +38,24 @@ class Enemy extends Character {
   rest() {
     // Wait until cooldown expires, then act
     const resetCooldown = function() {
-      this.cooldown = 0;
+      this.cooldown = 3000;
       this.act();
     };
     setTimeout(resetCooldown, this.cooldown);
   }
 
   attack() {
-    // Fill this in
+    if (this.player && this.player.currentRoom === this.currentRoom) {
+      this.player.applyDamage(this.strength);
+      // this.alert(`${this.name} attacks you for ${this.strength} damage!`);
+      this.cooldown = 3000; // Reset cooldown after attack
+    } else {
+      // this.alert(`${this.name} cannot find you!`);
+    }
   }
 
   applyDamage(amount) {
-    // Fill this in
+    this.health -= amount;
   }
 
 
@@ -50,12 +65,13 @@ class Enemy extends Character {
       // Dead, do nothing;
     } else if (this.cooldown > 0) {
       this.rest();
+    } else if (this.player) {
+      this.attack();
+      this.rest();
     } else {
-      this.scratchNose();
+      this.randomMove(); // Move randomly if no target
       this.rest();
     }
-
-    // Fill this in
   }
 
 
@@ -64,6 +80,19 @@ class Enemy extends Character {
 
     this.alert(`${this.name} scratches its nose`);
 
+  }
+
+
+  hit(damage) {
+    this.applyDamage(damage);
+    if (this.health > 0) {
+      this.targetPlayer();
+    }
+  }
+
+  targetPlayer() {
+    this.attackTarget = this.currentRoom.getEnemies().find(enemy => enemy === this); // Assuming only one enemy per room
+    //this.alert(`${this.name} is enraged!`);
   }
 
 

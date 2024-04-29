@@ -33,34 +33,44 @@ class Player extends Character {
     }
   }
 
+  // Picks up an item from a room into the player's inventory
   takeItem(itemName) {
-
-    // Fill this in
-
+    let pickedItem = this.currentRoom.getItemByName(itemName);
+    this.items = this.items.concat(pickedItem);
   }
 
-  dropItem(itemName) {
-
-    // Fill this in
-
-  }
 
   eatItem(itemName) {
-
-    // Fill this in
-
+    let idx;
+    for (const item of this.items) {
+        if (item.name === itemName) {
+            idx = this.items.indexOf(item);
+            break;
+        }
+    }
+    if (this.items[idx].isFood === true) {
+        this.items.splice(idx, 1);
+    }
   }
 
   getItemByName(name) {
-
-    // Fill this in
-
+    let idx;
+    for (const item of this.items) {
+        if (item.name === name) {
+            idx = this.items.indexOf(item);
+            break;
+        }
+    }
+    let gotItem = this.items.splice(idx, 1);
+    return gotItem[0];
   }
 
   hit(name) {
-
-    // Fill this in
-
+    if (name.currentRoom === this.currentRoom) {
+      name.applyDamage();
+      return true;
+    }
+    return false;
   }
 
   die() {
