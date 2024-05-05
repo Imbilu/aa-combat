@@ -5,6 +5,7 @@ class Enemy extends Character {
   constructor(name, description, currentRoom) {
     super(name, description, currentRoom);
     this.cooldown = 3000;
+    this.attackTarget = null;
   }
 
   setPlayer(player) {
@@ -13,15 +14,13 @@ class Enemy extends Character {
 
 
   randomMove() {
-    setTimeout(function () {
       const availableExits = this.currentRoom.getExits();
       if (availableExits.length > 0) {
         const randomIndex = Math.floor(Math.random() * availableExits.length);
         const newRoom = this.currentRoom.getRoomInDirection(availableExits[randomIndex]);
         this.currentRoom = newRoom;
       }
-    }, this.cooldown);
-
+      this.cooldown = 3000;
   }
 
   takeSandwich() {
@@ -45,17 +44,15 @@ class Enemy extends Character {
   }
 
   attack() {
-    if (this.player && this.player.currentRoom === this.currentRoom) {
-      this.player.applyDamage(this.strength);
-      // this.alert(`${this.name} attacks you for ${this.strength} damage!`);
+    if (this.attackTarget) {
+      this.attackTarget.applyDamage(this.strength);
       this.cooldown = 3000; // Reset cooldown after attack
-    } else {
-      // this.alert(`${this.name} cannot find you!`);
     }
   }
 
   applyDamage(amount) {
     this.health -= amount;
+    this.attack();
   }
 
 
@@ -83,17 +80,16 @@ class Enemy extends Character {
   }
 
 
-  hit(damage) {
-    this.applyDamage(damage);
-    if (this.health > 0) {
-      this.targetPlayer();
-    }
-  }
+  // hit(damage) {
+  //   this.applyDamage(damage);
+  //   if (this.health > 0) {
+  //     this.targetPlayer();
+  //   }
+  // }
 
-  targetPlayer() {
-    this.attackTarget = this.currentRoom.getEnemies().find(enemy => enemy === this); // Assuming only one enemy per room
-    //this.alert(`${this.name} is enraged!`);
-  }
+  // targetPlayer() {
+  //   this.attackTarget = this.player;
+  // }
 
 
 }

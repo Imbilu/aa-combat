@@ -64,8 +64,16 @@ class Room {
   }
 
   getEnemyByName(name) {
-
-    // Fill this in
+    let idx;
+    let enemies = this.getEnemies();
+    for (const enemy of enemies) {
+      if(enemy.name === name) {
+        idx = enemies.indexOf(enemy);
+        break;
+      }
+    }
+    let found = enemies.splice(idx, 1);
+    return found[0];
   }
 }
 

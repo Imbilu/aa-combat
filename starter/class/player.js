@@ -66,17 +66,25 @@ class Player extends Character {
   }
 
   hit(name) {
-    if (name.currentRoom === this.currentRoom) {
-      name.applyDamage();
-      return true;
-    }
-    return false;
+      let enemy = this.currentRoom.getEnemyByName(name);
+      // if (enemy.currentRoom)
+      enemy.applyDamage(this.strength);
+      enemy.attackTarget = this;
   }
 
   die() {
     console.log("You are dead!");
     process.exit();
   }
+
+  // setEnemies() {
+  //   if(this.currentRoom.getEnemies()) {
+  //     let enemies = this.currentRoom.getEnemies();
+  //     for(const enemy of enemies) {
+  //       enemy.setPlayer(this);
+  //     }
+  //   }
+  // }
 
 }
 
