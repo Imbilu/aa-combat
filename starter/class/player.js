@@ -1,11 +1,13 @@
 const {Character} = require('./character');
 const {Enemy} = require('./enemy');
 const {Food} = require('./food');
+const Shop = require('./shop');
 
 class Player extends Character {
 
   constructor(name, startingRoom) {
     super(name, "main character", startingRoom);
+    this.gold = 100;
   }
 
   move(direction) {
@@ -77,6 +79,16 @@ class Player extends Character {
     process.exit();
   }
 
+
+  buy(itemName) {
+    if (this.currentRoom instanceof Shop) {
+      let item = this.currentRoom.getItemByName(itemName);
+      if(item) {
+        this.items.push(item);
+        this.gold -= item.price;
+      }
+    }
+  }
   // setEnemies() {
   //   if(this.currentRoom.getEnemies()) {
   //     let enemies = this.currentRoom.getEnemies();

@@ -1,8 +1,9 @@
 class Item {
-  constructor(name, description, isFood=false) {
+  constructor(name, description, price=0) {
     this.name = name;
     this.description = description;
-    this.isFood = isFood;
+    this.isFood = false;
+    this.price = price;
   }
 
 }
